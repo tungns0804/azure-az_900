@@ -1,0 +1,18 @@
+/* Font nhúng base64 + toàn bộ CSS gốc của bản HTML (giữ nguyên, không sửa). */
+@import './fonts.css';
+@import './base.css';
+
+/* app-root và các host component không tạo box riêng — giữ đúng bố cục gốc. */
+app-root {
+  display: contents;
+}
+app-sidebar {
+  display: contents;
+}
+app-question-card,
+app-study {
+  display: block;
+}
+app-vi-box {
+  display: contents;
+}

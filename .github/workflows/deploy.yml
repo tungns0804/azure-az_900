@@ -1,0 +1,52 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Cần quyền ghi để đẩy bản build sang nhánh gh-pages.
+permissions:
+  contents: write
+
+# Chỉ cho phép 1 lượt deploy chạy tại một thời điểm.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Sinh lại public/az900-extra.json và public/az900-vi.json từ data/.
+      # Script tự kiểm tra tính hợp lệ nên dữ liệu hỏng sẽ làm hỏng build luôn,
+      # thay vì lặng lẽ deploy một bản thiếu câu hỏi.
+      - name: Build data
+        run: npm run build:data
+
+      # base-href phải khớp đường dẫn con của GitHub Pages: /<tên-repo>/
+      - name: Build
+        run: npm run build -- --configuration production --base-href "/${{ github.event.repository.name }}/"
+
+      - name: Publish to gh-pages
+        working-directory: dist/az900-app/browser
+        run: |
+          touch .nojekyll   # tắt Jekyll để file bắt đầu bằng "_" không bị loại
+          cp index.html 404.html   # mọi đường dẫn lạ vẫn mở được ứng dụng
+          git init -b gh-pages
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Deploy ${{ github.sha }}"
+          git push --force \
+            "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" \
+            gh-pages
