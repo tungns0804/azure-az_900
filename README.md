@@ -108,7 +108,8 @@ Hai công tắc độc lập ở thanh trên:
 * **Song ngữ: Bật / Tắt** — hiện bản dịch tiếng Việt của *nội dung câu hỏi* ngay dưới bản tiếng Anh
   (đề thi thật ra đề bằng tiếng Anh nên phần câu hỏi luôn giữ nguyên bản gốc).
 
-Bản dịch đóng gói sẵn trong `public/az900-vi.json` nên chạy **hoàn toàn offline**, không cần mạng và
+Bản dịch tiếng Việt của **cả 728 câu** (đề bài, đáp án, các dòng con và phần giải thích) được đóng gói
+sẵn trong `public/az900-vi.json` nên chạy **hoàn toàn offline**, không cần mạng và
 không cần API key. Đường gọi API dịch vẫn còn nhưng **mặc định tắt**; ai muốn cắm proxy backend
 riêng thì đặt `window.AZ900_TRANSLATE_ENDPOINT` trước khi ứng dụng khởi động. **Đừng** đặt API key
 trong mã chạy ở trình duyệt.
@@ -133,7 +134,7 @@ public/az900-data.json      662 câu gốc rút từ PDF — KHÔNG chỉnh tay,
 public/az900-extra.json     66 câu bổ sung          } sinh ra từ data/, đừng sửa trực tiếp
 public/az900-vi.json        bản dịch tiếng Việt      }
 data/extra-*.mjs            NGUỒN song ngữ của câu bổ sung (Anh + Việt cạnh nhau)
-data/vi-original-*.mjs      NGUỒN bản dịch tiếng Việt cho câu gốc
+data/vi-original-*.mjs      NGUỒN bản dịch tiếng Việt cho 662 câu gốc (12 file)
 tools/build-data.mjs        kiểm tra tính hợp lệ rồi sinh hai file JSON trong public/
 tools/extract/              pipeline Python rút câu hỏi từ PDF (xem bảng ở trên)
 src/app/core/categories.ts  danh mục 4 phần / 15 nhóm / 61 chủ đề + mô tả + link Microsoft Learn

@@ -68,6 +68,23 @@ def exhibit(pno):
 IMG_QNS = {91, 227, 369, 370, 621, 685, 692}
 
 
+DEFAULT_TABLE_STEM = ('For each of the following statements, select Yes if the statement is true. '
+                      'Otherwise, select No.')
+
+
+def clean_stem(lines, qtype):
+    """Bỏ những dòng chỉ chứa số hiệu câu.
+
+    Vài slide dạng bảng đặt "Q189:" vào ô tiêu đề của bảng, và ô đó không phải lúc nào
+    cũng là dòng đầu tiên theo thứ tự đọc, nên bước cắt tiền tố ở extract.py bỏ sót.
+    Bỏ xong mà không còn dòng nào thì dùng câu dẫn chuẩn của dạng bảng Yes/No.
+    """
+    out = [t for t in lines if t.strip() and not re.fullmatch(r'Q\d+\s*:?', t.strip())]
+    if not out and qtype in ('yesno_table', 'match'):
+        return [DEFAULT_TABLE_STEM]
+    return out
+
+
 def merge_blocks(blocks):
     """Nối lại câu bị tách đôi thành hai khối.
 
@@ -94,7 +111,7 @@ for r in kept:
         'page': r['pno'] + 1,
         'part': r['part'],
         'type': r['type'],
-        'question': r['question'],
+        'question': clean_stem(r['question'], r['type']),
         'options': r['options'],
         'subs': r['subs'],
         'explanation': merge_blocks(r['explanation']),
