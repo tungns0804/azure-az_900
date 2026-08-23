@@ -104,6 +104,8 @@ export const STRINGS = {
   'data.export': ['Xuất JSON', 'Export JSON'],
   'data.import': ['Nhập JSON', 'Import JSON'],
   'data.reset': ['Xoá tiến độ', 'Reset progress'],
+  /** phần đầu tên file khi bấm Xuất JSON — ngày tháng được nối vào sau */
+  'data.exportName': ['az900-tien-do-', 'az900-progress-'],
   'data.status': ['Trạng thái: {mode}', 'Storage: {mode}'],
   'store.memory': ['Không lưu được (chỉ trong phiên này)', 'Not persisted (this session only)'],
   'store.artifact': ['Đã lưu trong Claude', 'Saved in Claude'],

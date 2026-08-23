@@ -9,7 +9,10 @@ import { DOMAIN_EN, TOPIC_EN } from './categories.en';
 export type DomainId = 'd1' | 'd2' | 'd3' | 'd4';
 
 export interface StudyLink {
+  /** nhãn hiển thị (tiếng Việt) */
   label: string;
+  /** nhãn tiếng Anh — gán tự động từ categories.en.ts */
+  labelEn?: string;
   url: string;
 }
 
@@ -44,6 +47,8 @@ export interface StudyDomain {
   objective: string;
   /** tỉ trọng trong đề thi */
   weight: string;
+  /** tỉ trọng hiển thị bằng tiếng Anh — gán tự động, chỉ khác ở phần mở rộng */
+  weightEn?: string;
   intro: string;
   groups: StudyGroup[];
 }
@@ -747,7 +752,7 @@ export const DOMAINS: StudyDomain[] = [
           {
             id: 'ex-support',
             title: 'Gói hỗ trợ Azure',
-            objective: 'Describe Azure support plans (đã bỏ khỏi đề cương hiện hành)',
+            objective: 'Describe Azure support plans (removed from the current study guide)',
             overview:
               'Bốn gói: Basic (miễn phí cho mọi tài khoản, chỉ có tài liệu và cộng đồng — KHÔNG mở được ticket kỹ thuật), Developer (giờ hành chính, dùng cho môi trường thử nghiệm), Standard (24/7, dùng cho môi trường chạy thật), Professional Direct (24/7 cộng thêm tư vấn kiến trúc và ProDirect delivery manager). Từ Developer trở lên đều mở được yêu cầu hỗ trợ. Đề cũ hay hỏi: gói rẻ nhất mà vẫn có đánh giá kiến trúc → Professional Direct; cần hỗ trợ 24/7 rẻ nhất → Standard.',
             links: [
@@ -762,7 +767,7 @@ export const DOMAINS: StudyDomain[] = [
           {
             id: 'ex-lifecycle',
             title: 'Vòng đời dịch vụ: preview và GA',
-            objective: 'Describe the Azure service lifecycle (đã bỏ khỏi đề cương hiện hành)',
+            objective: 'Describe the Azure service lifecycle (removed from the current study guide)',
             overview:
               'Private preview: chỉ khách hàng được mời. Public preview: ai cũng dùng thử được nhưng KHÔNG có SLA, KHÔNG khuyến nghị dùng cho môi trường chạy thật, và hỗ trợ bị giới hạn. General availability (GA): phát hành rộng rãi, có SLA đầy đủ. Modern Lifecycle Policy: Microsoft báo trước tối thiểu 12 tháng trước khi ngừng hỗ trợ một dịch vụ không có dịch vụ kế nhiệm.',
             links: [
@@ -827,6 +832,7 @@ for (const d of DOMAINS) {
   if (de) {
     d.titleEn = de.title;
     d.introEn = de.intro;
+    d.weightEn = de.weight ?? d.weight;
   }
   for (const g of d.groups) {
     for (const t of g.topics) {
@@ -834,6 +840,10 @@ for (const d of DOMAINS) {
       if (te) {
         t.titleEn = te.title;
         t.overviewEn = te.overview;
+        // nhãn link đi theo chỉ số; thiếu phần tử nào thì link đó giữ nhãn tiếng Việt
+        te.links?.forEach((label, i) => {
+          if (t.links[i]) t.links[i].labelEn = label;
+        });
       }
       TOPIC_BY_ID[t.id] = t;
       DOMAIN_OF_TOPIC[t.id] = d.id;

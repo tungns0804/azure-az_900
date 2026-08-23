@@ -196,7 +196,7 @@ export class StudyComponent {
   readonly domains = computed(() =>
     DOMAINS.map((d) => ({
       id: d.id,
-      weight: d.weight,
+      weight: this.i18n.pick(d.weight, d.weightEn),
       objective: d.objective,
       title: this.i18n.pick(d.title, d.titleEn),
       intro: this.i18n.pick(d.intro, d.introEn),
@@ -205,7 +205,10 @@ export class StudyComponent {
         topics: g.topics.map((t) => ({
           id: t.id,
           objective: t.objective,
-          links: t.links,
+          links: t.links.map((l) => ({
+            url: l.url,
+            label: this.i18n.pick(l.label, l.labelEn),
+          })),
           title: this.i18n.pick(t.title, t.titleEn),
           overview: this.i18n.pick(t.overview, t.overviewEn),
         })),

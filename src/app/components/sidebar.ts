@@ -239,7 +239,7 @@ export class SidebarComponent {
     DOMAINS.map((d) => ({
       id: d.id,
       title: this.i18n.pick(d.title, d.titleEn),
-      weight: d.weight,
+      weight: this.i18n.pick(d.weight, d.weightEn),
       count: this.quiz.countFor(d.id),
       topics: d.groups.flatMap((g) =>
         g.topics.map((t) => ({
